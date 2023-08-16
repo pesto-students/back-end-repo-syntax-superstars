@@ -4,7 +4,6 @@ const config = require('./config/config');
 const cookieParser = require('cookie-parser');
 var cors = require('cors');
 require('./config/database');
-const serverless = require('serverless-http');
 
 const app = express();
 
@@ -64,4 +63,4 @@ app.listen(config.port, () => {
 });
 
 
-module.exports.handler = serverless(app);
+module.exports = app;

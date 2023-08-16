@@ -1,9 +1,8 @@
-const server = require('../src/server');
+const express = require('express');
+const api = require('../src/server'); // Path to your Express API code
 
-exports.handler = async (event, context) => {
-  const response = await server(event, context);
-  return {
-    statusCode: response.statusCode,
-    body: JSON.stringify(response.body),
-  };
-};
+const app = express();
+
+app.use('/.netlify/functions/app', api);
+
+module.exports = app;
