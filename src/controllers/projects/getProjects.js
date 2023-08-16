@@ -6,15 +6,9 @@ const getProjects = async(req, res) => {
     if(!req.user)
       return res.status(401).send({ message: "User is not authorised."});
 
-    // const sort = {
-    //   name: !req.query.name,
-    //   createdAt: !req.query.date_created,
-    //   modifiedAt: !req.query.date_modified,
-    // }
-
     let filter = {user: new mongoose.Types.ObjectId(req.user.userId)};
 
-    let sortBy = {
+    let sort = {
       createdAt: -1
     };
 
@@ -26,15 +20,15 @@ const getProjects = async(req, res) => {
     };
 
     if (req.query.sort) {
-      if(sort === title) {
+      if(req.query.sort === 'title') {
         sort = {
           name: 1,
         }
-      } else if (sort === created) {
+      } else if (req.query.sort === 'created') {
         sort = {
           createdAt: -1
         }
-      } else if (sort === modified) {
+      } else if (req.query.sort === 'modified') {
         sort = {
           modifiedAt: -1
         }
@@ -56,7 +50,7 @@ const getProjects = async(req, res) => {
       $match: filter
     },
     {
-      $sort: sortBy
+      $sort: sort
     }
     ]);
 

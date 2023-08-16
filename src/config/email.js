@@ -1,20 +1,20 @@
 
 const nodemailer = require('nodemailer');
-const jwt = require('jsonwebtoken');
+const config = require("./config");
 
 const sendEmail = (req, res, user) => {
   const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-          user: process.env.EMAIL,
-          pass: process.env.PASSWORD
+          user: config.email.smtp.auth.user,
+          pass: config.email.smtp.auth.pass,
       }
   });
     
   const mailConfigurations = {
     
       // It should be a string of sender/server email
-      from: 'archnaarang20@gmail.com',
+      from: config.email.from,
     
       to: user.email,
     

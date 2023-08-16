@@ -12,6 +12,5 @@ router.get('/verify-email/:code', authController.verifyEmail);
 router.post('/google-login', authController.googleLogin);
 router.put('/edit-profile/:id', verifyToken, authController.updateProfile);
 router.put('/change-password/:id', verifyToken, authController.changePassword);
-router.post('/upload-profile-pic', authController.uploadProfilePic);
 
 module.exports = router;

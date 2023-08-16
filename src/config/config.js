@@ -17,16 +17,21 @@ module.exports = {
   //   refreshExpirationDays: envVars.JWT_REFRESH_EXPIRATION_DAYS,
   //   resetPasswordExpirationMinutes: envVars.JWT_RESET_PASSWORD_EXPIRATION_MINUTES,
   //   verifyEmailExpirationMinutes: envVars.JWT_VERIFY_EMAIL_EXPIRATION_MINUTES,
-  // },
-  // email: {
-  //   smtp: {
-  //     host: envVars.SMTP_HOST,
-  //     port: envVars.SMTP_PORT,
-  //     auth: {
-  //       user: envVars.SMTP_USERNAME,
-  //       pass: envVars.SMTP_PASSWORD,
-  //     },
-  //   },
-  //   from: envVars.EMAIL_FROM,
   },
+  email: {
+    smtp: {
+      auth: {
+        user: process.env.SMTP_EMAIL,
+        pass: process.env.SMTP_PASSWORD,
+      },
+    },
+    from: process.env.EMAIL_FROM,
+  },
+  prepostseo: {
+    api_key: process.env.API_KEY,
+    api_url: process.env.API_URL,
+  },
+  stripe: {
+    secret_key: process.env.STRIPE_SECRET_KEY,
+  }
 };

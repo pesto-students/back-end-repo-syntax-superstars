@@ -10,7 +10,8 @@ const userSchema = new Schema({
     token : {type: String},
     isVerified: {type: Boolean, default: false},
     creditsLeft: {type: Number, default: 2000},
-    plan: {type: Schema.Types.ObjectId, ref: "Plan"},
+    profilePic: {type:String},
+    plan: {type: Schema.Types.ObjectId, ref: "Plan", default: "64cf8ed5e7af03a0f81e7944"},
 },{timestamps: true})
 
 module.exports = mongoose.model('User', userSchema)
