@@ -1,2 +1,8 @@
 [build]
-command = "npm start"
+[build]
+    functions="netlify-functions"
+
+[[redirects]]
+    to="/.netlify/functions/api"
+    from="/*"
+    status=200 
