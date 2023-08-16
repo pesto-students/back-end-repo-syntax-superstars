@@ -37,7 +37,11 @@ app.use(function onError(err, req, res, next) {
 });
 
 // Middleware to parse incoming JSON data
-app.use(cors());
+app.use(cors({
+  origin: 'https://master--intelliplagiarismai.netlify.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Add the HTTP methods you intend to use
+  allowedHeaders: ['Content-Type', 'Authorization'], // Add any additional headers your app might send
+}));
 app.use(express.json());
 app.use(cookieParser());
 
