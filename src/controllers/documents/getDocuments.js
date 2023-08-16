@@ -8,7 +8,7 @@ const getDocuments = async(req, res) => {
 
     let filter = {user: new mongoose.Types.ObjectId(req.user.userId)};
 
-    let sortBy = {
+    let sort = {
       createdAt: -1
     };
 
@@ -17,7 +17,7 @@ const getDocuments = async(req, res) => {
       filter = {
         $and: [
           { project: new mongoose.Types.ObjectId(id) },
-          { is_file: Boolean(is_file) }
+          { is_file: is_file === 0 ? false : true }
         ]
         
       }
@@ -27,6 +27,22 @@ const getDocuments = async(req, res) => {
       const regex = new RegExp(req.query.name, 'g');
       filter = {
         name: { $regex: regex }
+      }
+    };
+
+    if (req.query.sort) {
+      if(req.query.sort === 'title') {
+        sort = {
+          name: 1,
+        }
+      } else if (req.query.sort === 'created') {
+        sort = {
+          createdAt: -1
+        }
+      } else if (req.query.sort === 'modified') {
+        sort = {
+          modifiedAt: -1
+        }
       }
     };
 
@@ -46,7 +62,7 @@ const getDocuments = async(req, res) => {
         $match: filter
       },
       {
-        $sort: sortBy
+        $sort: sort
       }
     ]);
 
@@ -82,6 +98,7 @@ const getDocumentsByWordCount = async(req, res) => {
     const documents = await Document.aggregate([
     {
       $match: {
+        user: new mongoose.Types.ObjectId(req.user.userId),
         updatedAt: {
           $gte: startDate,
           $lt: endDate // First day of the next month

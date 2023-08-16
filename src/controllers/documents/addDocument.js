@@ -1,9 +1,10 @@
-const Document = require("../../models/Document");
-const Report = require("../../models/Report");
-const User = require("../../models/User");
 const axios = require("axios");
 const FormData = require('form-data');
 const textReadability = require('text-readability');
+const Document = require("../../models/Document");
+const Report = require("../../models/Report");
+const User = require("../../models/User");
+const config = require("../../config/config");
 
 const addDocument = async(req,res) => {
   try {
@@ -53,13 +54,13 @@ const addDocument = async(req,res) => {
 
 const generateReport = async (text, documentId, userId) => {
   let data = new FormData();
-  data.append('key', '3ab06e8b06f7e3dcd4bc8f5eb028d418');
+  data.append('key', config.prepostseo.api_key);
   data.append('data', text);
 
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
-    url: 'https://www.prepostseo.com/apis/checkPlag',
+    url: config.prepostseo.api_url,
     headers: { 
       ...data.getHeaders()
     },
