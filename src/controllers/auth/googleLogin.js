@@ -2,13 +2,23 @@ const User = require('../../models/User');
 const bcrypt = require("bcryptjs");
 const getToken = require('./jwtUtils');
 const Plan = require('../../models/Plan');
+const axios = require("axios");
 
 const googleLogin = async (req, res) => {
   try {
-    const {email_verified, given_name, family_name, email} = req.body;
+    const response = await axios.get(
+      "https://www.googleapis.com/oauth2/v3/userinfo",
+      {
+        headers: {
+          Authorization: `Bearer ${req.body.access_token}`,
+        },
+      }
+    );
+
+    const {email_verified, given_name, family_name, email} = response.data;
 
     if(!email_verified){
-        return res.sendStatus(401).status({Message: "User is not verified."});
+        return res.status(401).send({Message: "User is not verified."});
     };
 
     const foundUser = await User.findOne({email}).exec();
@@ -35,7 +45,7 @@ const googleLogin = async (req, res) => {
     const token =  getToken({ email, userId: foundUser._id });
     foundUser.token = token;
     foundUser.isVerified = email_verified;
-    const result = await foundUser.save()
+    await foundUser.save()
     return res.json(foundUser);
   } catch (error) {
     console.log(error);
