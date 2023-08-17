@@ -30,18 +30,10 @@ app.use(Sentry.Handlers.errorHandler());
 
 // Optional fallthrough error handler
 app.use(function onError(err, req, res, next) {
-  // The error id is attached to `res.sentry` to be returned
-  // and optionally displayed to the user for support.
   res.statusCode = 500;
   res.end(res.sentry + "\n");
 });
 
-// Middleware to parse incoming JSON data
-// app.use(cors({
-//   origin: '*',
-//   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Add the HTTP methods you intend to use
-//   allowedHeaders: ['Content-Type', 'Authorization'], // Add any additional headers your app might send
-// }));
 app.use(express.json());
 app.use(cookieParser());
 

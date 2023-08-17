@@ -13,11 +13,11 @@ const login = async(req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      res.status(404).send({ message: "User not found." });
+      res.status(200).send({ message: "User not found." });
     }
     
     if (!user.isVerified){
-      return res.status(401).send({msg:'Your Email has not been verified.'});
+      return res.status(200).send({message:'Your Email has not been verified.'});
     };
     if (user && (await bcrypt.compare(password, user.password))) {
 

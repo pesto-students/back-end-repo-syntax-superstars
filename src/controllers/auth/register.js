@@ -20,21 +20,19 @@ const register = async(req, res) => {
 
     encryptedPassword = await bcrypt.hash(password, 10);
 
+    const plan = Plan.findOne({monthly_rate: 0});
+
     const user = await User.create({
       firstName,
       lastName,
       email: email.toLowerCase(),
       password: encryptedPassword,
+      plan: plan?._id,
     });
 
     const token =  getToken({ email, userId: user._id });
 
     user.token = token;
-
-    const plan = Plan.findOne({monthly_rate: 0});
-    if(plan) {
-      user.plan = plan._id;
-    }
 
     user.save();
 

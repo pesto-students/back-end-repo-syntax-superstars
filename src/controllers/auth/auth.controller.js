@@ -4,6 +4,7 @@ const googleLogin = require('./googleLogin');
 const verifyEmail = require('./verifyEmail');
 const updateProfile = require('./updateProfile');
 const changePassword = require('./changePassword');
+const uploadProfilePic = require('./uploadProfilePic');
 
 module.exports = {
     login,
@@ -12,4 +13,5 @@ module.exports = {
     verifyEmail,
     updateProfile,
     changePassword,
+    uploadProfilePic,
 }

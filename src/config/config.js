@@ -2,7 +2,7 @@ require('dotenv').config();
 
 module.exports = {
   env: process.env.NODE_ENV,
-  port: 3000,
+  port: 2000,
   mongoose: {
     url: process.env.MONGODB_URL,
     options: {
@@ -13,10 +13,6 @@ module.exports = {
   },
   jwt: {
     secret: process.env.JWT_SECRET,
-  //   accessExpirationMinutes: envVars.JWT_ACCESS_EXPIRATION_MINUTES,
-  //   refreshExpirationDays: envVars.JWT_REFRESH_EXPIRATION_DAYS,
-  //   resetPasswordExpirationMinutes: envVars.JWT_RESET_PASSWORD_EXPIRATION_MINUTES,
-  //   verifyEmailExpirationMinutes: envVars.JWT_VERIFY_EMAIL_EXPIRATION_MINUTES,
   },
   email: {
     smtp: {
@@ -33,5 +29,6 @@ module.exports = {
   },
   stripe: {
     secret_key: process.env.STRIPE_SECRET_KEY,
-  }
+  },
+  app_domain: process.env.APP_DOMAIN,
 };

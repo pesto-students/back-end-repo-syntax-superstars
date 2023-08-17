@@ -36,7 +36,6 @@ const getPlanById = async(req, res) => {
 
 const createSession = async (req,res) => {
   try {
-    const YOUR_DOMAIN = 'http://localhost:3001';
     const session = await stripe.checkout.sessions.create({
       line_items: [
         {
@@ -46,8 +45,8 @@ const createSession = async (req,res) => {
         },
       ],
       mode: 'subscription',
-      success_url: `${YOUR_DOMAIN}/plan?success=true`,
-      cancel_url: `${YOUR_DOMAIN}/plan?canceled=true`,
+      success_url: `${config.app_domain}/plan?success=true`,
+      cancel_url: `${config.app_domain}/plan?canceled=true`,
     });
     res.status(200).send({url: session.url});
   } catch (err) {

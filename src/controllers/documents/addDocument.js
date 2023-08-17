@@ -21,14 +21,14 @@ const addDocument = async(req,res) => {
     if (text) {
       words_count = await text.split(' ').length;
       userData = await User.findOne({ _id: user.userId});
-
+      
       if (userData.creditsLeft > 0){
         const result = userData.creditsLeft - words_count;
         userData.creditsLeft = result > 0 ? result : 0;
       }
       await userData.save();
     }
-
+    
     const document = await Document.create({
       name,
       author,
@@ -40,52 +40,55 @@ const addDocument = async(req,res) => {
       file_size: size,
       user: user.userId,
     });
+    
+    const report = await generateReport(text, document, userData, res);
 
-    const report = generateReport(text, document._id, user.userId);
-
-    if(!document)
-      return res.status(404).json({ message: "Document creation failed"});
-
-    res.status(201).json({ document, userData, report });
   }catch(err) {
     console.log(err);
   }
 };
 
-const generateReport = async (text, documentId, userId) => {
-  let data = new FormData();
-  data.append('key', config.prepostseo.api_key);
-  data.append('data', text);
+const generateReport = async (text, document, user, res) => {
+  try {
+      let data = new FormData();
+      data.append('key', config.prepostseo.api_key);
+      data.append('data', text);
+    
+      let configObject = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: config.prepostseo.api_url,
+        headers: { 
+          ...data.getHeaders()
+        },
+        data : data
+      };
+    
+      const response = await axios.request(configObject);
 
-  let config = {
-    method: 'post',
-    maxBodyLength: Infinity,
-    url: config.prepostseo.api_url,
-    headers: { 
-      ...data.getHeaders()
-    },
-    data : data
-  };
-
-  axios.request(config)
-    .then((response) => {
       if (response?.data) {
         const {plagPercent, paraphrasePercent, uniquePercent} = response.data;
         const readabilityScore = textReadability.fleschReadingEase(text);
-        const report = Report.create({
+        const report = await Report.create({
           plagPercent,
           paraphrasePercent,
           uniquePercent,
           readabilityScore,
-          document: documentId,
-          user: userId,
+          document: document._id,
+          user: user._id,
         });
-
-        return report;
+    
+        console.log(report);
+    
+        if(!document)
+        return res.status(404).json({ message: "Document creation failed"});
+    
+        if (report)
+        res.status(201).json({ document, user, report });
       }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  }catch(error) {
+    console.log(error);
+  };
 }
+
 module.exports = addDocument;

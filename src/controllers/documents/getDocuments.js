@@ -15,11 +15,8 @@ const getDocuments = async(req, res) => {
     if (req.query.id) {
       const { id, is_file } = req.query;
       filter = {
-        $and: [
-          { project: new mongoose.Types.ObjectId(id) },
-          { is_file: is_file === 0 ? false : true }
-        ]
-        
+          project: new mongoose.Types.ObjectId(id),
+          is_file: is_file === 'true',
       }
     };
 
@@ -81,37 +78,32 @@ const getDocumentsByWordCount = async(req, res) => {
     if(!req.user)
       return res.status(401).send({ message: "User is not authorised."});
 
-  //   const documents = await Document.find().populate({
-  //     path: "project", select: "name",
-  // });
+      const {date} = req.params;
+      let dateArr = [];
 
-    const {date} = req.params;
-    let dateArr = [];
-    console.log(req.params);
-    if(date) {
-      dateArr = date.split("-");
-    }
-    console.log(dateArr);
-    const startDate = new Date(dateArr[0], dateArr[1] - 1, 1);
-    const endDate = new Date(dateArr[0], dateArr[1], 1);
-
-    const documents = await Document.aggregate([
-    {
-      $match: {
-        user: new mongoose.Types.ObjectId(req.user.userId),
-        updatedAt: {
-          $gte: startDate,
-          $lt: endDate // First day of the next month
-        }
-      },
-    },
-    {
-      $group: {
-        _id: { $dateToString: { format: "%Y-%m-%d", date: "$updatedAt" } },
-        count: {$sum: "$words_count"}
+      if(date) {
+        dateArr = date.split("-");
       }
-    },
-    ]);
+      const startDate = new Date(dateArr[0], dateArr[1] - 1, 1);
+      const endDate = new Date(dateArr[0], dateArr[1], 1);
+
+      const documents = await Document.aggregate([
+        {
+          $match: {
+            user: new mongoose.Types.ObjectId(req.user.userId),
+            updatedAt: {
+              $gte: startDate,
+              $lt: endDate // First day of the next month
+            }
+          },
+        },
+        {
+          $group: {
+            _id: { $dateToString: { format: "%Y-%m-%d", date: "$updatedAt" } },
+            count: {$sum: "$words_count"}
+          }
+        },
+      ]);
 
     if (documents.length === 0) 
       res.status(200).send({message: "No documents found."});
@@ -122,4 +114,20 @@ const getDocumentsByWordCount = async(req, res) => {
   }
 };
 
-module.exports = { getDocuments, getDocumentsByWordCount };
+const getDocumentsById = async(req,res) => {
+  try {
+    if(!req.user)
+      return res.status(401).send({ message: "User is not authorised."});
+
+    const document = await Document.findOne({_id: req.params.id});
+
+    if (document.length === 0) 
+      res.status(200).send({message: "No documents found."});
+
+    res.status(200).send(document);
+  } catch(err) {
+    console.log(err);
+  }
+}
+
+module.exports = { getDocuments, getDocumentsByWordCount, getDocumentsById };
