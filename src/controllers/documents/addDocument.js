@@ -73,7 +73,7 @@ const generateReport = async (text, document, user, res) => {
           plagPercent,
           paraphrasePercent,
           uniquePercent,
-          readabilityScore: readabilityScore.score,
+          readabilityScore: Math.round(readabilityScore.score),
           document: document._id,
           user: user._id,
         });
