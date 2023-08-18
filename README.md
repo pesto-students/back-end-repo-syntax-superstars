@@ -5,7 +5,6 @@
 
 ## Table of Contents
 
-- [Demo](#demo)
 - [Installation](#installation)
 - [Technology Stack](#technology-stack)
 - [Author](#author)
