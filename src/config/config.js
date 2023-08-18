@@ -2,7 +2,7 @@ require('dotenv').config();
 
 module.exports = {
   env: process.env.NODE_ENV,
-  port: 2000,
+  port: 2001,
   mongoose: {
     url: process.env.MONGODB_URL,
     options: {

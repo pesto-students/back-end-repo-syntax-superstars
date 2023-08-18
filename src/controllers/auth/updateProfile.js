@@ -15,7 +15,7 @@ const updateProfile = async(req, res) => {
       res.status(404).send("User not found.");
     }
 
-    let userData = await getUserByEmail(user.email, user._id);
+    let userData = await getUserByEmail(email, user._id);
 
     if (email && !(userData)) {
       res.status(400).send("Email already taken");
