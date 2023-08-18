@@ -114,7 +114,7 @@ const getDocumentsByWordCount = async(req, res) => {
       ]);
 
     if (documents.length === 0) 
-      res.status(200).send({message: "No documents found."});
+      return res.status(200).send({message: "No documents found."});
 
     res.status(200).send(documents);
   } catch(err) {

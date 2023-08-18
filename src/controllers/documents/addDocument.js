@@ -1,6 +1,6 @@
 const axios = require("axios");
 const FormData = require('form-data');
-const textReadability = require('text-readability');
+const readability = require('readability-meter');
 const Document = require("../../models/Document");
 const Report = require("../../models/Report");
 const User = require("../../models/User");
@@ -68,17 +68,15 @@ const generateReport = async (text, document, user, res) => {
 
       if (response?.data) {
         const {plagPercent, paraphrasePercent, uniquePercent} = response.data;
-        const readabilityScore = textReadability.fleschReadingEase(text);
+        const readabilityScore = readability.ease(text);
         const report = await Report.create({
           plagPercent,
           paraphrasePercent,
           uniquePercent,
-          readabilityScore,
+          readabilityScore: readabilityScore.score,
           document: document._id,
           user: user._id,
         });
-    
-        console.log(report);
     
         if(!document)
         return res.status(404).json({ message: "Document creation failed"});
