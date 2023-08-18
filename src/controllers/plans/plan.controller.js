@@ -45,8 +45,8 @@ const createSession = async (req,res) => {
         },
       ],
       mode: 'subscription',
-      success_url: `${config.app_domain}/plan?success=true`,
-      cancel_url: `${config.app_domain}/plan?canceled=true`,
+      success_url: `${config.app_domain}/plan/success`,
+      cancel_url: `${config.app_domain}/plan/canceled`,
     });
     res.status(200).send({url: session.url});
   } catch (err) {
