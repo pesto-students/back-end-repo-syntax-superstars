@@ -7,7 +7,7 @@ const getPlans = async(req, res) => {
     if(!req.user)
       return res.status(401).send({ message: "User is not authorised."});
 
-    const plans = await Plan.find({monthly_rate: { $ne: 0 }});
+    const plans = await Plan.find({monthly_rate: { $ne: 0 }}).sort({ monthly_rate: 1});
 
     if (plans.length === 0) 
       res.status(200).send({message: "No plans found."});

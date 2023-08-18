@@ -7,7 +7,7 @@ const getUserByEmail = async (email, userId) => {
 
 const updateProfile = async(req, res) => {
   try {
-    const { firstName, lastName, email, plan, profilePic } = req.body;
+    const { firstName, lastName, email, plan, profilePic, creditsLeft } = req.body;
 
     const { user } = req;
 
@@ -21,7 +21,7 @@ const updateProfile = async(req, res) => {
       res.status(400).send("Email already taken");
     }
 
-    Object.assign(userData, {firstName, lastName, email, plan, profilePic});
+    Object.assign(userData, {firstName, lastName, email, plan, profilePic, creditsLeft});
     
     await userData.save();
     res.status(200).send({
