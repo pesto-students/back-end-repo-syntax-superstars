@@ -22,7 +22,7 @@ const sendEmail = (req, res, user) => {
       subject: 'Email Verification',
         
       // This would be the text of email body
-      text: 'Hello '+ user.firstName +',\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/auth/verify-email\/' + user.token + '\n\nThank You!\n'
+      text: 'Hello '+ user.firstName +',\n\n' + 'Please verify your account by clicking the link: \nhttps:\/\/' + req.headers.host + '\/api/auth/verify-email\/' + user.token + '\n\nThank You!\n'
         
   };
     

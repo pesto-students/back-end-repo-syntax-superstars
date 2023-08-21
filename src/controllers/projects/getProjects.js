@@ -30,7 +30,7 @@ const getProjects = async(req, res) => {
         }
       } else if (req.query.sort === 'modified') {
         sort = {
-          modifiedAt: -1
+          updatedAt: -1
         }
       }
     };
